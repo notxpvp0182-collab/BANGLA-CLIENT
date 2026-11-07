@@ -1,0 +1,26 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.banglaclient.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "MinecraftClientMixin",
+    "TitleScreenMixin",
+    "SplashOverlayMixin",
+    "InGameHudMixin",
+    "KeyboardMixin",
+    "MouseMixin",
+    "GameRendererMixin",
+    "WorldRendererMixin",
+    "EntityRenderDispatcherMixin",
+    "ParticleManagerMixin",
+    "CameraMixin",
+    "HeldItemRendererMixin",
+    "ChatHudMixin",
+    "PlayerListHudMixin",
+    "ClientPlayNetworkHandlerMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 0
+  }
+}

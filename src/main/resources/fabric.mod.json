@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "id": "banglaclient",
+  "version": "${version}",
+  "name": "BANGLACLIENT",
+  "description": "A fast, clean, lightweight, and customizable client-side Minecraft optimization and HUD mod developed by Ahmed.",
+  "authors": [
+    "Ahmed"
+  ],
+  "contact": {
+    "homepage": "https://play.banglaSMP.net"
+  },
+  "license": "All-Rights-Reserved",
+  "icon": "assets/banglaclient/textures/gui/logo.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "com.banglaclient.BanglaClient"
+    ]
+  },
+  "mixins": [
+    "banglaclient.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": "*",
+    "minecraft": "*",
+    "java": "*",
+    "fabric-api": "*"
+  },
+  "suggests": {
+    "modmenu": "*"
+  }
+}

@@ -14,56 +14,42 @@ import com.banglaclient.module.impl.smallitems.SmallShovel;
 import com.banglaclient.module.impl.smallitems.SmallSword;
 import com.banglaclient.module.impl.smallitems.SmallTotem;
 import com.banglaclient.module.impl.smallitems.TotemResizer;
-import net.minecraft.client.network.AbstractClientPlayerEntity;
-import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.item.HeldItemRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.util.Hand;
+import net.minecraft.util.Arm;
 import net.minecraft.util.math.RotationAxis;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-/**
- * Hooks HeldItemRenderer#renderFirstPersonItem to apply transformations for:
- * - ViewmodelEditor (X/Y/Z offsets, Pitch/Yaw/Roll rotations, uniform scale)
- * - HeldItemScale & SmallItems
- * - Small Item System (SmallSword, SmallAxe, SmallPickaxe, SmallShovel, SmallFood, SmallBlock, SmallShield, SmallTotem, TotemResizer)
- */
 @Mixin(HeldItemRenderer.class)
 public abstract class HeldItemRendererMixin {
 
-    @Inject(method = "renderFirstPersonItem", at = @At("HEAD"))
-    private void banglaclient$pushViewmodelTransform(
-            AbstractClientPlayerEntity player,
-            float tickDelta,
-            float pitch,
-            Hand hand,
-            float swingProgress,
-            ItemStack item,
-            float equipProgress,
-            MatrixStack matrices,
-            VertexConsumerProvider vertexConsumers,
-            int light,
-            CallbackInfo ci
-    ) {
+    @Inject(method = "applyEquipOffset", at = @At("TAIL"), require = 0)
+    private void banglaclient$applyViewmodelAndSmallItems(MatrixStack matrices, Arm arm, float equipProgress, CallbackInfo ci) {
         if (ClientCore.getInstance().getClientState().isVanillaMode()) {
             return;
         }
-        matrices.push();
+        MinecraftClient mc = MinecraftClient.getInstance();
+        if (mc.player == null) {
+            return;
+        }
+
+        boolean isMainHand = (arm == mc.player.getMainArm());
+        ItemStack item = isMainHand ? mc.player.getMainHandStack() : mc.player.getOffHandStack();
 
         ModuleRegistry reg = ModuleRegistry.getInstance();
         float totalScale = 1.0f;
         float translateY = 0.0f;
 
-        // 1. ViewmodelEditor
         var vmOpt = reg.getByClass(ViewmodelEditor.class);
         if (vmOpt.isPresent() && vmOpt.get().isEnabled()) {
             ViewmodelEditor vm = vmOpt.get();
-            float handSign = (hand == Hand.MAIN_HAND) ? 1.0f : -1.0f;
+            float handSign = isMainHand ? 1.0f : -1.0f;
             matrices.translate(vm.getOffsetX() * handSign, vm.getOffsetY(), vm.getOffsetZ());
             if (vm.getRotPitch() != 0.0f) matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(vm.getRotPitch()));
             if (vm.getRotYaw() != 0.0f) matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(vm.getRotYaw() * handSign));
@@ -71,10 +57,9 @@ public abstract class HeldItemRendererMixin {
             totalScale *= vm.getScale();
         }
 
-        // 2. HeldItemScale & SmallItems
         var heldScaleOpt = reg.getByClass(HeldItemScale.class);
         if (heldScaleOpt.isPresent() && heldScaleOpt.get().isEnabled()) {
-            totalScale *= (hand == Hand.MAIN_HAND) ? heldScaleOpt.get().getMainHandScale() : heldScaleOpt.get().getOffHandScale();
+            totalScale *= isMainHand ? heldScaleOpt.get().getMainHandScale() : heldScaleOpt.get().getOffHandScale();
         }
 
         var smallItemsOpt = reg.getByClass(SmallItems.class);
@@ -82,7 +67,6 @@ public abstract class HeldItemRendererMixin {
             totalScale *= smallItemsOpt.get().getGlobalItemScale();
         }
 
-        // 3. Specific Small Item System Modules
         if (item != null && !item.isEmpty()) {
             var sword = reg.getByClass(SmallSword.class);
             if (sword.isPresent() && sword.get().appliesTo(item)) totalScale *= sword.get().getSwordScale();
@@ -127,25 +111,6 @@ public abstract class HeldItemRendererMixin {
         }
         if (totalScale != 1.0f) {
             matrices.scale(totalScale, totalScale, totalScale);
-        }
-    }
-
-    @Inject(method = "renderFirstPersonItem", at = @At("RETURN"))
-    private void banglaclient$popViewmodelTransform(
-            AbstractClientPlayerEntity player,
-            float tickDelta,
-            float pitch,
-            Hand hand,
-            float swingProgress,
-            ItemStack item,
-            float equipProgress,
-            MatrixStack matrices,
-            VertexConsumerProvider vertexConsumers,
-            int light,
-            CallbackInfo ci
-    ) {
-        if (!ClientCore.getInstance().getClientState().isVanillaMode()) {
-            matrices.pop();
         }
     }
 }

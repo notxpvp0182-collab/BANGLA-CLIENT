@@ -37,7 +37,7 @@ public final class MoonPhase extends HudModule {
 
     @Override
     protected void renderHudContent(DrawContext context, float tickDelta, boolean isEditing) {
-        int phase = (mc.world != null) ? (mc.world.getMoonPhase() & 7) : 0;
+        int phase = (mc.world != null) ? ((int) ((mc.world.getTimeOfDay() / 24000L) % 8L + 8L) % 8) : 0;
         drawSimpleLabelValue(context, "Moon", PHASE_NAMES[phase]);
     }
 }

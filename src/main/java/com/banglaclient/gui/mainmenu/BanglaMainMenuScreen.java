@@ -325,33 +325,25 @@ public final class BanglaMainMenuScreen extends Screen {
 
     @Override
     public boolean mouseDragged(Click click, double deltaX, double deltaY) {
-        if (click != null && this.mouseDragged(click.x(), click.y(), click.button(), deltaX, deltaY)) {
-            return true;
-        }
+        
         return super.mouseDragged(click, deltaX, deltaY);
     }
 
     @Override
     public boolean mouseReleased(Click click) {
-        if (click != null && this.mouseReleased(click.x(), click.y(), click.button())) {
-            return true;
-        }
+        
         return super.mouseReleased(click);
     }
 
     @Override
     public boolean keyPressed(KeyInput input) {
-        if (input != null && this.keyPressed(input.key(), input.scancode(), input.modifiers())) {
-            return true;
-        }
+        
         return super.keyPressed(input);
     }
 
     @Override
     public boolean charTyped(CharInput input) {
-        if (input != null && this.charTyped((char) input.codepoint(), input.modifiers())) {
-            return true;
-        }
+        
         return super.charTyped(input);
     }
 }

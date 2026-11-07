@@ -90,7 +90,7 @@ public final class Keybind {
             if (glfwName != null && !glfwName.isBlank()) {
                 return glfwName.toUpperCase();
             }
-            return InputUtil.fromKeyCode(keyCode, 0).getLocalizedText().getString().toUpperCase();
+            return InputUtil.fromKeyCode(new net.minecraft.client.input.KeyInput(keyCode, 0, 0)).getLocalizedText().getString().toUpperCase();
         } catch (Exception ignored) {
             return "KEY " + keyCode;
         }

@@ -77,7 +77,7 @@ public final class EntityCulling extends AbstractModule {
             }
         }
 
-        Vec3d cameraPos = mc.gameRenderer.getCamera().getPos();
+        Vec3d cameraPos = mc.player.getCameraPosVec(1.0f);
         Vec3d targetCenter = entity.getBoundingBox().getCenter();
         BlockHitResult hit = mc.world.raycast(new RaycastContext(
                 cameraPos,

@@ -12,7 +12,6 @@
     "MouseMixin",
     "GameRendererMixin",
     "WorldRendererMixin",
-    "EntityRenderDispatcherMixin",
     "ParticleManagerMixin",
     "CameraMixin",
     "HeldItemRendererMixin",

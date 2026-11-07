@@ -4,7 +4,7 @@ import com.banglaclient.module.AbstractModule;
 import com.banglaclient.module.ModuleCategory;
 import com.banglaclient.setting.IntegerSetting;
 import net.minecraft.client.option.CloudRenderMode;
-import net.minecraft.client.option.ParticlesMode;
+import net.minecraft.particle.ParticlesMode;
 
 /**
  * Module 284: Battery Saver

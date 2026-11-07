@@ -79,7 +79,7 @@ public final class ProjectileTrajectoryPreview extends HudModule {
             vel = vel.multiply(0.99).subtract(0.0, gravity, 0.0);
         }
 
-        double impactDist = mc.player.getPos().distanceTo(pos);
+        double impactDist = new Vec3d(mc.player.getX(), mc.player.getY(), mc.player.getZ()).distanceTo(pos);
         String text = showImpactDistance.isEnabled()
                 ? String.format("Landing: ~%.1fm", impactDist)
                 : String.format("X:%d Y:%d Z:%d", (int) pos.x, (int) pos.y, (int) pos.z);

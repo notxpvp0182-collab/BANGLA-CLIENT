@@ -280,17 +280,13 @@ public final class HudEditorScreen extends Screen {
 
     @Override
     public boolean keyPressed(KeyInput input) {
-        if (input != null && this.keyPressed(input.key(), input.scancode(), input.modifiers())) {
-            return true;
-        }
+        
         return super.keyPressed(input);
     }
 
     @Override
     public boolean charTyped(CharInput input) {
-        if (input != null && this.charTyped((char) input.codepoint(), input.modifiers())) {
-            return true;
-        }
+        
         return super.charTyped(input);
     }
 }

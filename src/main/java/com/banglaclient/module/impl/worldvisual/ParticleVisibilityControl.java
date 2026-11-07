@@ -4,7 +4,7 @@ import com.banglaclient.module.AbstractModule;
 import com.banglaclient.module.ModuleCategory;
 import com.banglaclient.setting.BooleanSetting;
 import com.banglaclient.setting.ModeSetting;
-import net.minecraft.client.option.ParticlesMode;
+import net.minecraft.particle.ParticlesMode;
 
 /**
  * Module 193: Particle Visibility Control
